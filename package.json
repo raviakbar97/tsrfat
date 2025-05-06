@@ -8,12 +8,13 @@
     "start": "node server.js",
     "client": "cd client && npm start",
     "build": "cd client && npm run build",
-    "install-client": "cd client && npm install",
+    "install-client": "cd client && npm install --no-audit --no-fund --loglevel=error",
     "postinstall": "npm run install-client"
   },
   "engines": {
     "node": ">=14.0.0"
   },
+  "cacheDirectories": ["node_modules", "client/node_modules"],
   "dependencies": {
     "axios": "^0.27.2",
     "cors": "^2.8.5",
