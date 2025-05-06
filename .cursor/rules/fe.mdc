@@ -1,0 +1,116 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 📊 Desain Frontend Website Manajemen Keuangan Bisnis
+
+Website ini bertujuan untuk mengelola keuangan bisnis secara otomatis dan manual berdasarkan transaksi yang ditarik dari email (Gmail) atau input user.
+
+---
+
+## ✅ Fitur Utama
+
+### 1. Dashboard Ringkasan
+- Total Pemasukan, Pengeluaran, Saldo Akhir
+- Grafik cashflow (line chart / area chart)
+- Statistik per bulan / hari
+- Notifikasi untuk transaksi yang membutuhkan review
+
+### 2. Manajemen Transaksi
+- Tabel daftar transaksi lengkap
+- Indikator: Otomatis / Manual
+- Status: Pending, Diterima, Ditolak
+- Aksi cepat: Review, Edit, Tentukan Kategori
+
+### 3. Input Transaksi Manual
+- Form isian:
+  - Tanggal
+  - Nominal
+  - Kategori
+  - Catatan
+  - Upload bukti (opsional)
+
+### 4. Review Transaksi Otomatis
+- Daftar transaksi dari Gmail
+- Deteksi otomatis kategori (jika bisa)
+- Aksi:
+  - "Tentukan Kategori"
+  - "Valid"
+  - "Tolak"
+
+### 5. Filter & Export
+- Filter berdasarkan:
+  - Tanggal
+  - Kategori
+  - Status
+  - Nominal
+- Export:
+  - Excel
+  - PDF
+
+### 6. Kategori & Akun Custom
+- Menambah atau mengganti kategori pengeluaran / pemasukan
+
+---
+
+## 🧠 Mekanisme UX
+
+- **Inline Action**: aksi langsung di baris tabel
+- **Autosave Draft**: input manual tidak hilang saat reload
+- **Modal Interaktif**: review transaksi tanpa berpindah halaman
+- **Snackbar Feedback**: notifikasi ringan di bawah layar
+- **Autofill dan Auto Focus** saat input manual
+- **Confirmation Dialog** sebelum aksi penting
+- **Dark Mode Support** (opsional)
+
+---
+
+## 🎨 Saran UI
+
+- **Card Layout** untuk dashboard ringkasan
+- **Tabs / Segmented Control** untuk navigasi cepat:
+  - Semua Transaksi
+  - Review
+  - Input Manual
+- **Tabel Transaksi** dengan:
+  - Icon Status (⏳, ✅, ❌)
+  - Badge warna per kategori
+  - Hover highlight untuk aksi
+- **Form Compact** dengan field-group collapsible
+- **Modal Pop-up Review** dengan form mini
+- **Typography & Spacing**:
+  - Font readable
+  - Padding cukup
+  - Desain minimalis & responsif
+
+---
+
+## 📂 Kategori Transaksi (Jurnal)
+
+| Nama Kategori         | Deskripsi                                                      |
+|-----------------------|----------------------------------------------------------------|
+| Advertising Expense   | Biaya iklan, promosi                                           |
+| Distribution Expense  | Biaya pengiriman, ongkir                                       |
+| Labour Expense        | Biaya gaji, upah                                               |
+| Materials Expense     | Biaya bahan, perlengkapan, mesin                               |
+| Other Expense         | Biaya lain (kompensasi, kehilangan barang, dll)               |
+| Overhead Expense      | Biaya listrik, perlengkapan kantor                             |
+| Owner Withdrawal      | Penarikan dana oleh pemilik                                    |
+| Other Income          | Pendapatan lain (misal: bunga)                                 |
+| Dana Masuk            | Pemasukan dana (penarikan customer, top up internal, dll)      |
+
+---
+
+## 🧪 Tambahan Opsional (Advanced)
+
+- **Search Query mirip Gmail**:
+  - `kategori:Advertising sebelum:2025/01/01`
+- **Tagging System** untuk multi-kategori transaksi
+- **Insight & Rekomendasi** otomatis:
+  - Contoh: “Biaya iklan naik 25% dibanding bulan lalu”
+
+---
+
+> Dirancang untuk backend dengan metode Gmail Watch, tapi fleksibel untuk manual review dan penginputan.
+

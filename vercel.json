@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "client/package.json", "use": "@vercel/static-build" },
+    { "src": "api/**/*.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/journal-entries", "dest": "/api/journal-entries.js" },
+    { "src": "/api/process-gmail", "dest": "/api/process-gmail.js" },
+    
+    { "src": "/static/(.*)", "dest": "/client/static/$1" },
+    { "src": "/manifest.json", "dest": "/client/manifest.json" },
+    { "src": "/favicon.ico", "dest": "/client/favicon.ico" },
+    { "src": "/logo(.*).png", "dest": "/client/logo$1.png" },
+    
+    { "src": "/(.*)", "dest": "/client/index.html" }
+  ]
+} 

@@ -1,0 +1,148 @@
+---
+description: guide for developing the project
+globs: 
+alwaysApply: false
+---
+# Aplikasi Jurnal Otomatis dengan Node.js — Cursor AI Rules
+
+---
+
+## Phase 1: Project Initialization
+
+### Task 1.1: Buat Struktur Folder
+- **Prompt:** “Generate project folders: `src/`, `config/`, `models/`, `services/`, `controllers/`, `routes/`, `utils/`, `public/`.”
+- **Testing:** Cek di file tree bahwa semua folder muncul.
+
+### Task 1.2: Setup Config Default
+- **Prompt:** “Create `config/default.js` with placeholders for MongoDB Atlas connection, Gmail OAuth credentials, and journal mappings.”
+- **Testing:** Buka `config/default.js` dan pastikan ada objek `db.mongoURI`, `gmail.clientID`, `journalMap`.
+
+---
+
+## Phase 2: Integrasi Gmail API
+
+### Task 2.1: Setup Google Cloud OAuth
+- **Prompt:** “Add steps to register app in Google Cloud Console, enable Gmail API, and obtain OAuth2 client ID & secret.”
+- **Testing:** Verifikasi terdapat `client_id` & `client_secret` di environment.
+
+### Task 2.2: Buat Service OAuth2
+- **Prompt:** “Implement `services/OAuthService.js` to handle Gmail OAuth2 flow and store `refresh_token`.”
+- **Testing:** Simulasikan permintaan OAuth dan cek `refresh_token` tersimpan.
+
+### Task 2.3: Konfigurasi Gmail Watch
+- **Prompt:** “Write `services/GmailWatchService.js` to call Gmail API `watch` on label ‘seabank’.”
+- **Testing:** Panggil fungsi watch dan pastikan response mengandung `historyId`.
+
+---
+
+## Phase 3: Fetch & Parse Email (SeaBank Methodology)
+
+### Task 3.1: Buat `EmailFetcher`
+- **Prompt:** “Implement `services/EmailFetcher.js` to fetch new messages with label ‘seabank’ from Gmail API.”
+- **Testing:** Jalankan fungsi dan pastikan response mengandung list `messageId`.
+
+### Task 3.2: Buat `TransactionParser` Berdasarkan SeaBank Email
+- **Prompt:**  
+  “Buat `services/TransactionParser.js` dengan metodologi:
+  1. Deteksi jenis email berdasarkan subject/body dengan keyword (misalnya 'berhasil diproses').
+  2. Parse HTML body pakai `jsdom`.
+  3. Ambil semua `<tr>` dalam tabel transaksi.
+  4. Ambil `<td>` pertama sebagai label, `<td>` kedua sebagai value.
+  5. Normalisasi label (lowercase, trim).
+  6. Mapping label ke field standar:
+     - 'nama penerima' → `partner`
+     - 'rekening tujuan' → `rekening`
+     - 'jumlah' → `nominal`
+     - 'catatan' → `note`
+  7. Fallback: jika `partner` kosong → gunakan `rekening`.
+  8. Keluarkan object transaksi standar:
+     ```json
+     {
+       "tanggal": "...",
+       "jenis": "keluar",
+       "nominal": 100000,
+       "partner": "BNI - XXXXXXXX8954",
+       "rekening": "BNI - XXXXXXXX8954",
+       "note": ""
+     }
+     ```”
+- **Testing:** Uji dengan beberapa HTML email SeaBank. Output harus tetap valid walau label berubah posisi/nama.
+
+### Task 3.3: Buat `TransactionTypeDetector`
+- **Prompt:**  
+  “Buat helper `detectTransactionType(subject, body)` untuk klasifikasi: `transfer_masuk`, `transfer_keluar`, `pembayaran`, dll. Kembalikan `unknown` jika tidak cocok.”
+- **Testing:** Coba input subject dan isi body untuk masing-masing tipe dan pastikan jenis terdeteksi dengan benar.
+
+---
+
+## Phase 4: Decision Engine
+
+### Task 4.1: Definisikan Mapping Jurnal
+- **Prompt:** “In `config/journalMap.js`, list keyword-to-journal rules, e.g. `{ keyword: ‘transfer’, journal: ‘Kas – Bank’ }`.”
+- **Testing:** `require()` mapping dan cek array rules.
+
+### Task 4.2: Buat `JournalDecider`
+- **Prompt:** “Implement `services/JournalDecider.js` to match parsed transaksi ke mapping. Tandai jika ambiguous.”
+- **Testing:** Berikan input `deskripsi` uji coba, cek hasil `{ journal, needsReview }`.
+
+---
+
+## Phase 5: Database & Storage (MongoDB Atlas)
+
+### Task 5.1: Definisikan Skema Akun & Transaksi
+- **Prompt:** “Create Mongoose models: `Account`, `Transaction`, `JournalEntry` untuk menyimpan data jurnal dan transaksi.”
+- **Testing:** Connect ke MongoDB Atlas dan pastikan skema terbuat.
+
+### Task 5.2: Pipeline Simpan Otomatis
+- **Prompt:** “In `controllers/GmailWebhookController.js`, chain: `EmailFetcher` → `TransactionParser` → `JournalDecider` → simpan ke MongoDB.”
+- **Testing:** Simulasikan webhook POST dan cek record masuk di MongoDB.
+
+---
+
+## Phase 6: API & Front-End
+
+### Task 6.1: Buat Endpoint Transaksi
+- **Prompt:** “Define `GET /transactions` dan `POST /transactions/review` di `routes/transactions.js`.”
+- **Testing:** Gunakan Postman untuk cek response dan status 200.
+
+### Task 6.2: Halaman Dashboard
+- **Prompt:** “Generate stub React component `Dashboard.jsx` untuk ringkasan saldo & grafik.”
+- **Testing:** Jalankan `npm start` dan lihat halaman dashboard kosong.
+
+---
+
+## Phase 7: Laporan & Export
+
+### Task 7.1: Implement `ReportGenerator`
+- **Prompt:** “Implement service untuk membuat laporan: Neraca, Laba Rugi, Arus Kas dan export ke PDF/Excel.”
+- **Testing:** Jalankan generator, pastikan file ter-export sesuai data.
+
+---
+
+## Phase 8: Error Handling & Manual Review
+
+### Task 8.1: UI Review Transaksi
+- **Prompt:** “Add React page `ReviewTransactions.jsx` untuk menampilkan transaksi `needsReview` dan fitur koreksi jurnal.”
+- **Testing:** Tandai 1 transaksi ambiguous, pastikan muncul di halaman review.
+
+---
+
+## Phase 9: Testing & Deployment
+
+### Task 9.1: Unit Tests
+- **Prompt:** “Write Jest tests untuk parser, decider, dan controller.”
+- **Testing:** Jalankan `npm test`, pastikan > 90% coverage.
+
+### Task 9.2: CI/CD
+- **Prompt:** “Setup GitHub Actions untuk build, test, dan deploy ke Vercel/Heroku.”
+- **Testing:** Push ke GitHub, pastikan workflow berjalan dan app live.
+
+---
+
+## Phase 10: Monitoring & Maintenance
+
+### Task 10.1: Logging & Health Check
+- **Prompt:** “Implement middleware logging dan endpoint `GET /health` untuk status pengecekan aplikasi.”
+- **Testing:** Akses `/health`, response: `{ status: "ok" }`.
+
+---

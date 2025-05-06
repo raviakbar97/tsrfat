@@ -1,0 +1,11 @@
+[
+  { "keyword": ["advertising", "ads"], "journal": "Advertising Expense" },
+  { "keyword": ["distribution", "ongkir", "ongkos kirim"], "journal": "Distribution Expense" },
+  { "keyword": ["komisi", "labour", "upah", "gaji", "gaji karyawan"], "journal": "Labour Expense" },
+  { "keyword": ["termos", "material", "materials", "dp", "pelunasan", "perlengkapan", "mesin", "perabotan", "BNI - XXXXXXXX8954"], "journal": "Materials Expense" },
+  { "keyword": ["other expense", "kompensasi", "lost item", "koreksi"], "journal": "Other Expense" },
+  { "keyword": ["overhead", "listrik", "lakban", "plastik sampah"], "journal": "Overhead Expense" },
+  { "keyword": ["owner withdrawal", "owd"], "journal": "Owner Withdrawal" },
+  { "keyword": ["other income",  "interest", "bunga"], "journal": "Other Income" },
+  { "keyword": ["dana masuk", "penarikan", "penarikan dana"], "journal": "Dana Masuk" }
+]
